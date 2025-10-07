@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/J.Timer/static/css/main.b66c5cef.css",
-    "main.js": "/J.Timer/static/js/main.3baa7d7f.js",
-    "static/js/453.27578b2e.chunk.js": "/J.Timer/static/js/453.27578b2e.chunk.js",
-    "index.html": "/J.Timer/index.html",
-    "main.b66c5cef.css.map": "/J.Timer/static/css/main.b66c5cef.css.map",
-    "main.3baa7d7f.js.map": "/J.Timer/static/js/main.3baa7d7f.js.map",
-    "453.27578b2e.chunk.js.map": "/J.Timer/static/js/453.27578b2e.chunk.js.map"
+    "main.css": "/timer/static/css/main.b66c5cef.css",
+    "main.js": "/timer/static/js/main.2974a868.js",
+    "static/js/453.4eedfc86.chunk.js": "/timer/static/js/453.4eedfc86.chunk.js",
+    "index.html": "/timer/index.html",
+    "main.b66c5cef.css.map": "/timer/static/css/main.b66c5cef.css.map",
+    "main.2974a868.js.map": "/timer/static/js/main.2974a868.js.map",
+    "453.4eedfc86.chunk.js.map": "/timer/static/js/453.4eedfc86.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b66c5cef.css",
-    "static/js/main.3baa7d7f.js"
+    "static/js/main.2974a868.js"
   ]
 }
