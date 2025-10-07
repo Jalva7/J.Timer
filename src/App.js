@@ -115,7 +115,7 @@ export default function PixelPomodoro() {
         {/* Header */}
         <div className="header">
           <h1 className="title">
-            🍅 PIXEL POMODORO
+            J.Timer
           </h1>
           <div className="progress-dots">
             {[...Array(4)].map((_, i) => (
