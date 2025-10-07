@@ -1,38 +1,483 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Root Variables - Lavender Theme */
+:root {
+  --lavender-dark: #4a3960;
+  --lavender-medium: #7c5d9e;
+  --lavender-light: #a78bca;
+  --lavender-pale: #d4c5e8;
+  --lavender-accent: #b899db;
+  --work-color: #9b6fb9;
+  --break-color: #a78bca;
+  --long-break-color: #8b6fa3;
+  --bg-dark: #2d1b3d;
+  --bg-medium: #3d2749;
+  --text-light: #f0e6ff;
+  --text-accent: #e6d5ff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  font-family: 'Press Start 2P', cursive;
+  image-rendering: pixelated;
 }
 
-.App-header {
-  background-color: #282c34;
+/* Container */
+.pomodoro-container {
   min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--lavender-dark) 100%);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 1rem;
+}
+
+.pomodoro-content {
+  max-width: 42rem;
+  width: 100%;
+}
+
+/* Pixel Border Effect */
+.pixel-border {
+  box-shadow: 
+    0 -4px 0 0 currentColor,
+    0 4px 0 0 currentColor,
+    -4px 0 0 0 currentColor,
+    4px 0 0 0 currentColor,
+    -4px -4px 0 0 currentColor,
+    4px -4px 0 0 currentColor,
+    -4px 4px 0 0 currentColor,
+    4px 4px 0 0 currentColor;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--lavender-pale);
+  margin-bottom: 1rem;
+  text-shadow: 4px 4px 0 var(--lavender-dark);
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--bg-medium);
+  box-shadow: 
+    0 -4px 0 0 var(--lavender-dark),
+    0 4px 0 0 var(--lavender-dark),
+    -4px 0 0 0 var(--lavender-dark),
+    4px 0 0 0 var(--lavender-dark);
+}
+
+.dot.completed {
+  background-color: var(--lavender-light);
+}
+
+.completed-count {
+  color: var(--text-accent);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Timer Card */
+.timer-card {
+  padding: 4px;
+  box-shadow: 
+    0 -4px 0 0 currentColor,
+    0 4px 0 0 currentColor,
+    -4px 0 0 0 currentColor,
+    4px 0 0 0 currentColor,
+    -4px -4px 0 0 currentColor,
+    4px -4px 0 0 currentColor,
+    -4px 4px 0 0 currentColor,
+    4px 4px 0 0 currentColor;
+}
+
+.timer-card.work {
+  color: var(--work-color);
+}
+
+.timer-card.shortBreak {
+  color: var(--break-color);
+}
+
+.timer-card.longBreak {
+  color: var(--long-break-color);
+}
+
+.timer-inner {
+  background-color: var(--bg-medium);
+  padding: 2rem;
+}
+
+/* Mode Selector */
+.mode-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+}
+
+.mode-button {
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-dark);
+  color: var(--text-accent);
+  border: none;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  transition: transform 0.1s;
+}
+
+.mode-button:hover {
+  background-color: var(--lavender-dark);
+}
+
+.mode-button:active {
+  transform: translate(2px, 2px);
+}
+
+.mode-button.active {
+  background-color: var(--lavender-medium);
+  color: var(--text-light);
+}
+
+/* Mode Display */
+.mode-display {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.mode-text {
+  color: var(--lavender-accent);
+  font-size: 0.875rem;
+}
+
+/* Timer Display */
+.timer-display {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.timer-digits {
+  font-size: 5rem;
+  color: var(--text-light);
+  font-weight: bold;
+  text-shadow: 4px 4px 0 var(--lavender-dark);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.control-button {
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.1s;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.control-button:active {
+  transform: translate(2px, 2px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.control-button.start-pause {
+  background-color: var(--lavender-medium);
+}
+
+.control-button.start-pause:hover {
+  background-color: var(--lavender-light);
+}
+
+.control-button.reset {
+  background-color: var(--work-color);
+}
+
+.control-button.reset:hover {
+  background-color: var(--lavender-accent);
+}
+
+/* Main Grid Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Task Panel */
+.task-panel {
+  padding: 4px;
+  box-shadow: 
+    0 -4px 0 0 var(--lavender-medium),
+    0 4px 0 0 var(--lavender-medium),
+    -4px 0 0 0 var(--lavender-medium),
+    4px 0 0 0 var(--lavender-medium),
+    -4px -4px 0 0 var(--lavender-medium),
+    4px -4px 0 0 var(--lavender-medium),
+    -4px 4px 0 0 var(--lavender-medium),
+    4px 4px 0 0 var(--lavender-medium);
+}
+
+.task-panel-inner {
+  background-color: var(--bg-medium);
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-title {
+  color: var(--lavender-pale);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 2px 2px 0 var(--lavender-dark);
+}
+
+/* Task Input */
+.task-input-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.task-input {
+  flex: 1;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  border: 2px solid var(--lavender-dark);
+  padding: 0.75rem;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.625rem;
+  outline: none;
+}
+
+.task-input::placeholder {
+  color: var(--lavender-dark);
+}
+
+.task-input:focus {
+  border-color: var(--lavender-medium);
+}
+
+.add-task-button {
+  background-color: var(--lavender-medium);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-task-button:hover {
+  background-color: var(--lavender-light);
+}
+
+.add-task-button:active {
+  transform: translate(2px, 2px);
+}
+
+/* Task List */
+.task-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
+  margin-bottom: 1rem;
+}
+
+.empty-tasks {
+  color: var(--lavender-dark);
+  text-align: center;
+  font-size: 0.625rem;
+  padding: 2rem 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--bg-dark);
+  border: 2px solid var(--lavender-dark);
+}
+
+.task-item.completed {
+  opacity: 0.6;
+}
+
+.task-check {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  background-color: var(--bg-medium);
+  border: 2px solid var(--lavender-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lavender-pale);
+  transition: transform 0.1s;
+}
+
+.task-check:hover {
+  background-color: var(--lavender-dark);
+}
+
+.task-check:active {
+  transform: translate(1px, 1px);
+}
+
+.task-item.completed .task-check {
+  background-color: var(--lavender-medium);
+}
+
+.task-text {
+  flex: 1;
+  color: var(--text-light);
+  font-size: 0.625rem;
+  word-break: break-word;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+}
+
+.task-delete {
+  background-color: var(--work-color);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+}
+
+.task-delete:hover {
+  background-color: var(--lavender-accent);
+}
+
+.task-delete:active {
+  transform: translate(1px, 1px);
+}
+
+/* Task Stats */
+.task-stats {
+  text-align: center;
+  color: var(--lavender-accent);
+  font-size: 0.625rem;
+  padding-top: 0.75rem;
+  border-top: 2px solid var(--lavender-dark);
+}
+
+
+/* Footer */
+.footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-accent);
+  font-size: 0.75rem;
+}
+
+.footer p {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .timer-digits {
+    font-size: 4rem;
+  }
+
+  .mode-button,
+  .control-button {
+    font-size: 0.625rem;
+    padding: 0.75rem;
+  }
+
+  .timer-inner {
+    padding: 1.5rem;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .timer-digits {
+    font-size: 4rem;
+  }
+
+  .mode-button,
+  .control-button {
+    font-size: 0.625rem;
+    padding: 0.75rem;
+  }
+
+  .timer-inner {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1rem;
+  }
+
+  .timer-digits {
+    font-size: 3rem;
+  }
+
+  .footer {
+    font-size: 0.625rem;
+  }
+
+  .task-input {
+    font-size: 0.5rem;
   }
 }
