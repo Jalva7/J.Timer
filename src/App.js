@@ -1,4 +1,3 @@
-//import logo from './logo.svg';
 import './App.css';
 
 import { useState, useEffect } from 'react';
@@ -108,7 +107,6 @@ export default function PixelPomodoro() {
     }
   };
 
-
   return (
     <div className="pomodoro-container">
       <div className="pomodoro-content">
@@ -159,7 +157,6 @@ export default function PixelPomodoro() {
                 {mode === 'work' ? 'WORK TIME' : mode === 'shortBreak' ? 'SHORT BREAK' : 'LONG BREAK'}
               </p>
             </div>
-
 
             {/* Timer Display */}
               <div className="timer-display">
@@ -245,8 +242,8 @@ export default function PixelPomodoro() {
 
           {/* Footer Info */}
           <div className="footer">
-            <p>🎮 RETRO PRODUCTIVITY 🎮</p>
-            <p>Work: 25min | Short Break: 5min | Long Break: 15min</p>
+            <p> RETRO PRODUCTIVITY </p>
+            <p>Work: 25 min | Short Break: 5 min | Long Break: 15 min</p>
           </div>
         </div>
       </div>
