@@ -1,8 +1,6 @@
 import './App.css';
-
 import { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Plus, Trash2, Check } from 'lucide-react';
-import './App.css';
 
 export default function PixelPomodoro() {
   const [minutes, setMinutes] = useState(25);
@@ -12,10 +10,10 @@ export default function PixelPomodoro() {
   const [completedPomodoros, setCompletedPomodoros] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
-
-  const workTime = 25;
-  const shortBreakTime = 5;
-  const longBreakTime = 15;
+  const [workTime, setWorkTime] = useState(25);
+  const [shortBreakTime, setShortBreakTime] = useState(5);
+  const [longBreakTime, setLongBreakTime] = useState(15);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     let interval = null;
@@ -53,7 +51,7 @@ export default function PixelPomodoro() {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, minutes, seconds, mode, completedPomodoros]);
+  }, [isActive, minutes, seconds, mode, completedPomodoros, workTime, shortBreakTime, longBreakTime]);
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -126,9 +124,10 @@ export default function PixelPomodoro() {
           <p className="completed-count">COMPLETED: {completedPomodoros}</p>
         </div>
 
-        {/* Main Timer Card */}
-        <div className={`timer-card ${mode}`}>
-          <div className="timer-inner">
+        {/* Timer and Task Section */}
+        <div className="timer-task-section">
+          {/* Main Timer Card */}
+          <div className={`timer-card ${mode}`}>
             {/* Mode Selector */}
             <div className="mode-selector">
               <button
@@ -159,29 +158,28 @@ export default function PixelPomodoro() {
             </div>
 
             {/* Timer Display */}
-              <div className="timer-display">
-                <div className="timer-digits">
-                  {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-                </div>
+            <div className="timer-display">
+              <div className="timer-digits">
+                {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
               </div>
+            </div>
 
-              {/* Controls */}
-              <div className="controls">
-                <button
-                  onClick={toggleTimer}
-                  className="control-button start-pause"
-                >
-                  {isActive ? <Pause size={20} /> : <Play size={20} />}
-                  <span>{isActive ? 'PAUSE' : 'START'}</span>
-                </button>
-                <button
-                  onClick={resetTimer}
-                  className="control-button reset"
-                >
-                  <RotateCcw size={20} />
-                  <span>RESET</span>
-                </button>
-              </div>
+            {/* Controls */}
+            <div className="controls">
+              <button
+                onClick={toggleTimer}
+                className="control-button start-pause"
+              >
+                {isActive ? <Pause size={20} /> : <Play size={20} />}
+                <span>{isActive ? 'PAUSE' : 'START'}</span>
+              </button>
+              <button
+                onClick={resetTimer}
+                className="control-button reset"
+              >
+                <RotateCcw size={20} />
+                <span>RESET</span>
+              </button>
             </div>
           </div>
 
@@ -192,14 +190,13 @@ export default function PixelPomodoro() {
               
               {/* Add Task Input */}
               <div className="task-input-container">
-                <input
-                  type="text"
+                <textarea
                   value={newTask}
                   onChange={(e) => setNewTask(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Add a task..."
                   className="task-input"
-                  maxLength={50}
+                  rows="3"                
                 />
                 <button onClick={addTask} className="add-task-button">
                   <Plus size={16} />
@@ -239,14 +236,83 @@ export default function PixelPomodoro() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Bottom Section - Settings and Footer */}
+        <div className="bottom-section">
+          {/* Settings Panel */}
+          <div className="settings-section">
+            <button 
+              className="settings-toggle" 
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              {showSettings ? 'HIDE SETTINGS' : 'SHOW SETTINGS'}
+            </button>
+            
+            {showSettings && (
+              <div className="settings-panel">
+                <div className="setting-item">
+                  <label>Work Time (minutes):</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={workTime}
+                    onChange={(e) => {
+                      const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
+                      setWorkTime(value);
+                      if (mode === 'work') {
+                        setMinutes(value);
+                        setSeconds(0);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="setting-item">
+                  <label>Short Break (minutes):</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="30"
+                    value={shortBreakTime}
+                    onChange={(e) => {
+                      const value = Math.min(30, Math.max(1, parseInt(e.target.value) || 1));
+                      setShortBreakTime(value);
+                      if (mode === 'shortBreak') {
+                        setMinutes(value);
+                        setSeconds(0);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="setting-item">
+                  <label>Long Break (minutes):</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="60"
+                    value={longBreakTime}
+                    onChange={(e) => {
+                      const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
+                      setLongBreakTime(value);
+                      if (mode === 'longBreak') {
+                        setMinutes(value);
+                        setSeconds(0);
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Footer Info */}
           <div className="footer">
-            <p> RETRO PRODUCTIVITY </p>
-            <p>Work: 25 min | Short Break: 5 min | Long Break: 15 min</p>
+            <p>RETRO PRODUCTIVITY</p>
+            <p>Work: {workTime} min | Short Break: {shortBreakTime} min | Long Break: {longBreakTime} min</p>
           </div>
         </div>
       </div>
+    </div>
   );
 }
-
