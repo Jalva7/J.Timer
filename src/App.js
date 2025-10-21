@@ -7,13 +7,54 @@ export default function PixelPomodoro() {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [mode, setMode] = useState('work'); // 'work', 'shortBreak', 'longBreak'
-  const [completedPomodoros, setCompletedPomodoros] = useState(0);
-  const [tasks, setTasks] = useState([]);
+  const [completedPomodoros, setCompletedPomodoros] = useState(() => {
+    const saved = localStorage.getItem('completedPomodoros');
+    return saved ? parseInt(saved) : 0;
+  });
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [newTask, setNewTask] = useState('');
-  const [workTime, setWorkTime] = useState(25);
-  const [shortBreakTime, setShortBreakTime] = useState(5);
-  const [longBreakTime, setLongBreakTime] = useState(15);
+
+  const [workTime, setWorkTime] = useState(() => {
+    const saved = localStorage.getItem('workTime');
+    return saved ? parseInt(saved) : 25;
+  });
+  const [shortBreakTime, setShortBreakTime] = useState(() => {
+    const saved = localStorage.getItem('shortBreakTime');
+    return saved ? parseInt(saved) : 5;
+  });
+  const [longBreakTime, setLongBreakTime] = useState(() => {
+    const saved = localStorage.getItem('longBreakTime');
+    return saved ? parseInt(saved) : 15;
+  });
   const [showSettings, setShowSettings] = useState(false);
+
+  // Save tasks whenever they change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  // Save completed pomodoros
+  useEffect(() => {
+    localStorage.setItem('completedPomodoros', completedPomodoros.toString());
+  }, [completedPomodoros]);
+
+  // Save time settings
+  useEffect(() => {
+    localStorage.setItem('workTime', workTime.toString());
+  }, [workTime]);
+
+  useEffect(() => {
+    localStorage.setItem('shortBreakTime', shortBreakTime.toString());
+  }, [shortBreakTime]);
+
+  useEffect(() => {
+    localStorage.setItem('longBreakTime', longBreakTime.toString());
+  }, [longBreakTime]);
+
+  
 
   useEffect(() => {
     let interval = null;
@@ -311,6 +352,7 @@ export default function PixelPomodoro() {
             <p>RETRO PRODUCTIVITY</p>
             <p>Work: {workTime} min | Short Break: {shortBreakTime} min | Long Break: {longBreakTime} min</p>
           </div>
+
         </div>
       </div>
     </div>
