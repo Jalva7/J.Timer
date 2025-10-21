@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 /* Lavender Theme */
-
-
 /* Global Styles */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,7 +22,6 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-
 }
 
 .pomodoro-content {
@@ -43,7 +41,6 @@ body {
   justify-content: center;
   margin-top: 1rem;
   flex-direction:column;
-
 }
 
 /* Header */
@@ -224,6 +221,33 @@ body {
 }
 
 .control-button.reset:hover {
+  background-color: #b899db;
+}
+
+.control-button.stop-alarm {
+  background-color: #9b6fb9;
+}
+
+.control-button.stop-alarm:hover {
+  background-color: #b899db;
+}
+
+.mute-button {
+  padding: 1rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.1s;
+  color: white;
+  border-radius: 1rem;
+  background-color: #7c5d9e;
+}
+
+.mute-button:hover {
   background-color: #b899db;
 }
 

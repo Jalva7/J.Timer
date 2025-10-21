@@ -1,12 +1,19 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, Plus, Trash2, Check } from 'lucide-react';
+import { Play, Pause, RotateCcw, Plus, Trash2, Check, Volume2, VolumeX } from 'lucide-react';
+import useSound from 'use-sound';
+import alarmSound from './sounds/dream-memory-alarm.mp3';
 
 export default function PixelPomodoro() {
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [mode, setMode] = useState('work'); // 'work', 'shortBreak', 'longBreak'
+  const [isAlarmPlaying, setIsAlarmPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    const saved = localStorage.getItem('isMuted');
+    return saved ? JSON.parse(saved) : false;
+  });
   const [completedPomodoros, setCompletedPomodoros] = useState(() => {
     const saved = localStorage.getItem('completedPomodoros');
     return saved ? parseInt(saved) : 0;
@@ -31,6 +38,16 @@ export default function PixelPomodoro() {
   });
   const [showSettings, setShowSettings] = useState(false);
 
+  //Sound Stuff
+  const [playAlarm, {stop: stopAlarm}] = useSound(alarmSound, { 
+    volume: isMuted ? 0 : 0.5,
+    onend: () => setIsAlarmPlaying(false),
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('isMuted', JSON.stringify(isMuted));
+  }, [isMuted]);
+
   // Save tasks whenever they change
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -54,7 +71,6 @@ export default function PixelPomodoro() {
     localStorage.setItem('longBreakTime', longBreakTime.toString());
   }, [longBreakTime]);
 
-  
 
   useEffect(() => {
     let interval = null;
@@ -63,6 +79,10 @@ export default function PixelPomodoro() {
       interval = setInterval(() => {
         if (seconds === 0) {
           if (minutes === 0) {
+            if(!isMuted) {
+              playAlarm();
+              setIsAlarmPlaying(true);
+            }
             // Timer complete
             setIsActive(false);
             if (mode === 'work') {
@@ -92,7 +112,7 @@ export default function PixelPomodoro() {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, minutes, seconds, mode, completedPomodoros, workTime, shortBreakTime, longBreakTime]);
+  }, [isActive, minutes, seconds, mode, completedPomodoros, workTime, shortBreakTime, longBreakTime, playAlarm, isMuted]);
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -145,6 +165,16 @@ export default function PixelPomodoro() {
       addTask();
     }
   };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  }
+
+  const stopAlarmAndReset = () => {
+    stopAlarm();
+    setIsAlarmPlaying(false);
+    resetTimer();
+  }
 
   return (
     <div className="pomodoro-container">
@@ -207,6 +237,16 @@ export default function PixelPomodoro() {
 
             {/* Controls */}
             <div className="controls">
+              {isAlarmPlaying ? (
+                <button
+                  onClick={stopAlarmAndReset}
+                  className='control-button stop-alarm'
+                  >
+                    <RotateCcw size={20} />
+                    <span>STOP ALARM</span>
+                  </button>
+              ) : (
+              <>
               <button
                 onClick={toggleTimer}
                 className="control-button start-pause"
@@ -220,6 +260,17 @@ export default function PixelPomodoro() {
               >
                 <RotateCcw size={20} />
                 <span>RESET</span>
+              </button>
+            </>
+          )}
+
+              {/* Mute Button */}
+              <button 
+                onClick={toggleMute} 
+                className="mute-button"
+                title={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
               </button>
             </div>
           </div>
