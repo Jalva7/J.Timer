@@ -1,0 +1,163 @@
+/* Spotify Player Styles */
+.spotify-player {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(61, 39, 73, 0.5);
+  border-radius: 1rem;
+  border: 2px solid rgba(61, 39, 73, 0.5);
+  box-shadow: inset -5px -5px rgba(61, 39, 73, 0.5);
+}
+
+.spotify-player-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.spotify-album-art {
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.spotify-track-info {
+  text-align: center;
+  max-width: 300px;
+}
+
+.spotify-track-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e6d5ff;
+  margin-bottom: 5px;
+}
+
+.spotify-artist-name {
+  font-size: 14px;
+  color: #d4c5e8;
+}
+
+.spotify-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.spotify-control-btn {
+  background: rgba(61, 39, 73, 0.5);
+  border: 2px solid #d4c5e8;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #d4c5e8;
+}
+
+.spotify-control-btn:hover {
+  background: #b899db;
+  color: #000;
+  transform: scale(1.1);
+}
+
+.spotify-play-btn {
+  width: 50px;
+  height: 50px;
+}
+
+.spotify-no-playback {
+  text-align: center;
+  padding: 20px;
+  color: #d4c5e8;
+}
+
+.spotify-no-playback p {
+  margin: 10px 0;
+}
+
+.spotify-devices-btn {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background: #d4c5e8;
+  border: none;
+  border-radius: 20px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.spotify-devices-btn:hover {
+  background: #b899db;
+  transform: scale(1.05);
+}
+
+.spotify-devices-list {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.spotify-devices-list h3 {
+  color: #4a3960;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.device-item {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background: rgba(30, 215, 96, 0.1);
+  border: 1px solid #a0ade0;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.device-item:hover {
+  background: rgba(61, 39, 73, 0.5);
+}
+
+.device-item.active {
+  background: #7c5d9e;
+  color: #f0e6ff;
+}
+
+.device-type {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.active-badge {
+  background: #000;
+  color: #1DB954;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.spotify-error {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 10px;
+}
+

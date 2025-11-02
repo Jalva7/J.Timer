@@ -1,6 +1,6 @@
 {
   "name": "J.timer",
-  "homepage": "https://jalva7.github.io/J.Timer",
+  "proxy": "http://localhost:5001",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,6 +8,8 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
     "gh-pages": "^6.3.0",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
@@ -22,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server/index.js",
+    "dev": "npm-run-all --parallel server start"
   },
   "eslintConfig": {
     "extends": [
@@ -41,5 +45,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "npm-run-all": "^4.1.5",
+    "request": "^2.88.2"
   }
 }

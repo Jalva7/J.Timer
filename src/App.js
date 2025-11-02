@@ -1,10 +1,13 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Plus, Trash2, Check, Volume2, VolumeX } from 'lucide-react';
 import useSound from 'use-sound';
 import alarmSound from './sounds/dream-memory-alarm.mp3';
+import SpotifyPlayer from './SpotifyPlayer';
+import Login from './Login';
 
-export default function PixelPomodoro() {
+function App() {
+  const spotifyPlayerRef = useRef(null);
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -14,28 +17,34 @@ export default function PixelPomodoro() {
     const saved = localStorage.getItem('isMuted');
     return saved ? JSON.parse(saved) : false;
   });
+
   const [completedPomodoros, setCompletedPomodoros] = useState(() => {
     const saved = localStorage.getItem('completedPomodoros');
     return saved ? parseInt(saved) : 0;
   });
+
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('tasks');
     return saved ? JSON.parse(saved) : [];
   });
+
   const [newTask, setNewTask] = useState('');
 
   const [workTime, setWorkTime] = useState(() => {
     const saved = localStorage.getItem('workTime');
     return saved ? parseInt(saved) : 25;
   });
+
   const [shortBreakTime, setShortBreakTime] = useState(() => {
     const saved = localStorage.getItem('shortBreakTime');
     return saved ? parseInt(saved) : 5;
   });
+
   const [longBreakTime, setLongBreakTime] = useState(() => {
     const saved = localStorage.getItem('longBreakTime');
     return saved ? parseInt(saved) : 15;
   });
+
   const [showSettings, setShowSettings] = useState(false);
 
   //Sound Stuff
@@ -79,6 +88,11 @@ export default function PixelPomodoro() {
       interval = setInterval(() => {
         if (seconds === 0) {
           if (minutes === 0) {
+
+            if (spotifyPlayerRef.current) {
+              // Pause playback when timer ends
+              spotifyPlayerRef.current.pauseForAlarm();
+            }
             if(!isMuted) {
               playAlarm();
               setIsAlarmPlaying(true);
@@ -175,6 +189,31 @@ export default function PixelPomodoro() {
     setIsAlarmPlaying(false);
     resetTimer();
   }
+
+
+  const [token, setToken] = useState('');
+  
+  useEffect(() => {
+
+    async function getToken() {
+      try {
+        const response = await fetch('http://localhost:5001/auth/token');
+
+        if(!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        setToken(json.access_token);
+      } catch(error) {
+        console.error('Error fetching token:', error);
+        setToken('');
+      }
+    }
+        
+    getToken();
+      
+  }, []);  
+
 
   return (
     <div className="pomodoro-container">
@@ -330,72 +369,77 @@ export default function PixelPomodoro() {
           </div>
         </div>
 
-        {/* Bottom Section - Settings and Footer */}
+        {/* Bottom Section - Settings and Spotify */}
         <div className="bottom-section">
-          {/* Settings Panel */}
-          <div className="settings-section">
-            <button 
-              className="settings-toggle" 
-              onClick={() => setShowSettings(!showSettings)}
-            >
-              {showSettings ? 'HIDE SETTINGS' : 'SHOW SETTINGS'}
-            </button>
-            
-            {showSettings && (
-              <div className="settings-panel">
-                <div className="setting-item">
-                  <label>Work Time (minutes):</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={workTime}
-                    onChange={(e) => {
-                      const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
-                      setWorkTime(value);
-                      if (mode === 'work') {
-                        setMinutes(value);
-                        setSeconds(0);
-                      }
-                    }}
-                  />
+          <div className="bottom-section-grid">
+            {/* Settings Panel */}
+            <div className="settings-section">
+              <button 
+                className="settings-toggle" 
+                onClick={() => setShowSettings(!showSettings)}
+              >
+                {showSettings ? 'HIDE SETTINGS' : 'SHOW SETTINGS'}
+              </button>
+              
+              {showSettings && (
+                <div className="settings-panel">
+                  <div className="setting-item">
+                    <label>Work Time (minutes):</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="60"
+                      value={workTime}
+                      onChange={(e) => {
+                        const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
+                        setWorkTime(value);
+                        if (mode === 'work') {
+                          setMinutes(value);
+                          setSeconds(0);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="setting-item">
+                    <label>Short Break (minutes):</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="30"
+                      value={shortBreakTime}
+                      onChange={(e) => {
+                        const value = Math.min(30, Math.max(1, parseInt(e.target.value) || 1));
+                        setShortBreakTime(value);
+                        if (mode === 'shortBreak') {
+                          setMinutes(value);
+                          setSeconds(0);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="setting-item">
+                    <label>Long Break (minutes):</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="60"
+                      value={longBreakTime}
+                      onChange={(e) => {
+                        const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
+                        setLongBreakTime(value);
+                        if (mode === 'longBreak') {
+                          setMinutes(value);
+                          setSeconds(0);
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="setting-item">
-                  <label>Short Break (minutes):</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="30"
-                    value={shortBreakTime}
-                    onChange={(e) => {
-                      const value = Math.min(30, Math.max(1, parseInt(e.target.value) || 1));
-                      setShortBreakTime(value);
-                      if (mode === 'shortBreak') {
-                        setMinutes(value);
-                        setSeconds(0);
-                      }
-                    }}
-                  />
-                </div>
-                <div className="setting-item">
-                  <label>Long Break (minutes):</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="60"
-                    value={longBreakTime}
-                    onChange={(e) => {
-                      const value = Math.min(60, Math.max(1, parseInt(e.target.value) || 1));
-                      setLongBreakTime(value);
-                      if (mode === 'longBreak') {
-                        setMinutes(value);
-                        setSeconds(0);
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+            <div className='spotify-container'>
+              { (token === '')? <Login/> :<SpotifyPlayer token={token} /> }
+            </div>
           </div>
 
           {/* Footer Info */}
@@ -403,9 +447,12 @@ export default function PixelPomodoro() {
             <p>RETRO PRODUCTIVITY</p>
             <p>Work: {workTime} min | Short Break: {shortBreakTime} min | Long Break: {longBreakTime} min</p>
           </div>
-
         </div>
       </div>
     </div>
   );
 }
+
+export default App;
+
+/* PUBLIC_URL=https://jalva7.github.io/J.Timer npm run build, npm run deploy */
