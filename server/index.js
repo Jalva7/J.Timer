@@ -5,16 +5,21 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 
 
-const port = 5001
+dotenv.config()
+
+const port = process.env.PORT || 5001
+const CLIENT_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://jalva7.github.io/timer'
+  : 'http://localhost:3000'
 
 global.access_token = ''
-
-dotenv.config()
 
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
-var spotify_redirect_uri = 'http://127.0.0.1:5001/auth/callback'
+var spotify_redirect_uri = process.env.NODE_ENV === 'production'
+  ? process.env.SPOTIFY_REDIRECT_URI
+  : 'http://127.0.0.1:5001/auth/callback'
 
 var generateRandomString = function (length) {
   var text = '';
@@ -31,7 +36,7 @@ var app = express();
 console.log('Setting up CORS...');
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: [CLIENT_URL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true
 }));
 
@@ -83,10 +88,10 @@ app.get('/auth/callback', async (req, res) => {
         if (!error && response.statusCode === 200) {
             access_token = body.access_token;
             console.log('Access Token obtained:', access_token);
-            res.redirect('http://127.0.0.1:3000'); /*was http://localhost:3000 */
+            res.redirect(CLIENT_URL);
         } else {
             console.error('Auth error:', error, body);
-            res.redirect('http://127.0.0.1:3000?error=auth_failed'); /*was http://localhost:3000?error=auth_failed */
+            res.redirect(`${CLIENT_URL}?error=auth_failed`);
         }
     });
 })

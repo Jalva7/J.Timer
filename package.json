@@ -1,6 +1,7 @@
 {
   "name": "J.timer",
   "proxy": "http://localhost:5001",
+  "homepage": "https://jalva7.github.io/J.Timer/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
