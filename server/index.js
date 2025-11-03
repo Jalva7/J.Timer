@@ -9,7 +9,7 @@ dotenv.config()
 
 const port = process.env.PORT || 5001
 const CLIENT_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://jalva7.github.io/timer'
+  ? 'https://jalva7.github.io/J.Timer'
   : 'http://localhost:3000'
 
 global.access_token = ''

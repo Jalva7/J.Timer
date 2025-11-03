@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import config from './config';
 
 function Login() {
   return (
@@ -7,7 +8,7 @@ function Login() {
       <div className="login-content">
         <h1>J.Timer</h1>
         <p>Connect your Spotify account to play music during your work sessions</p>
-        <a className="login-button" href="http://127.0.0.1:5001/auth/login">
+        <a className="login-button" href={`${config.authUrl}/login`}>
           LOGIN WITH SPOTIFY
         </a>
       </div>
