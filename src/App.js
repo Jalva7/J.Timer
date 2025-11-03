@@ -5,6 +5,7 @@ import useSound from 'use-sound';
 import alarmSound from './sounds/dream-memory-alarm.mp3';
 import SpotifyPlayer from './SpotifyPlayer';
 import Login from './Login';
+import config from './config';
 
 function App() {
   const spotifyPlayerRef = useRef(null);
@@ -197,7 +198,7 @@ function App() {
 
     async function getToken() {
       try {
-        const response = await fetch('http://localhost:5001/auth/token');
+        const response = await fetch(`${config.apiUrl}/auth/token`);
 
         if(!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
