@@ -1,9 +1,7 @@
 const express = require('express');
 const request = require('request');
 const dotenv = require('dotenv');
-//const axios = require('axios');
 const cors = require('cors');
-
 
 dotenv.config()
 
@@ -18,7 +16,7 @@ var spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 
 var spotify_redirect_uri = process.env.NODE_ENV === 'production'
-  ? process.env.SPOTIFY_REDIRECT_URI
+  ? 'https://j-timer.onrender.com/auth/callback'
   : 'http://127.0.0.1:5001/auth/callback'
 
 var generateRandomString = function (length) {
@@ -36,7 +34,11 @@ var app = express();
 console.log('Setting up CORS...');
 
 app.use(cors({
-    origin: [CLIENT_URL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: [
+        'https://jalva7.github.io',
+        'http://localhost:3000', 
+        'http://127.0.0.1:3000'
+    ],
     credentials: true
 }));
 
@@ -59,12 +61,10 @@ app.get('/auth/login', (req, res) => {
         scope: scope,
         redirect_uri: spotify_redirect_uri,
         state: state
+    })
+
+    res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
 })
-
-res.redirect('https://accounts.spotify.com/authorize/?' + auth_query_parameters.toString());
-})
-
-
 
 app.get('/auth/callback', async (req, res) => {
     console.log('Callback hit, Code:', req.query.code);
@@ -100,6 +100,7 @@ app.get('/auth/token', (req, res) => {
     res.json({ access_token: access_token });
 });
 
-app.listen(port, () => {
-  console.log(`Listening at http://127.0.0.1:${port}`);
+// CRITICAL FIX: Bind to 0.0.0.0 for Render
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Listening on port ${port}`);
 });
