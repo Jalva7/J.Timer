@@ -1,4 +1,4 @@
-# J.Timer 🍅🎵
+# J.Timer 💜🎵
 
 A retro-styled Pomodoro timer with integrated Spotify playback. Stay productive with the Pomodoro Technique while enjoying your favorite music!
 
